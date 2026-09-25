@@ -7,15 +7,12 @@ const paragraphs=[
 "I don't want to disappoint you. I want to be someone who makes you smile, someone you feel loved by, and someone you can always feel safe with.",
 "I love you. ♥"
 ];
-let current=0,typing=false;
+let current=0,typing=false,showingFull=false;
 open.onclick=()=>{intro.classList.add("hidden");letter.classList.remove("hidden");showParagraph()};
-function showParagraph(){
- typing=true; next.disabled=true; next.style.opacity=".35"; textEl.textContent="";
- const p=paragraphs[current]; let i=0;
- function tick(){textEl.textContent=p.slice(0,i++); if(i<=p.length){setTimeout(tick,24)}else{typing=false;next.disabled=false;next.style.opacity="1";next.textContent=current===paragraphs.length-1?"Continue":"Next";if(current===paragraphs.length-1){next.classList.add("hidden");sign.classList.remove("hidden");more.classList.remove("hidden")}}}
- tick();
-}
-next.onclick=()=>{if(!typing&&current<paragraphs.length-1){current++;showParagraph()}};
+function typeString(p,done){typing=true;next.disabled=true;next.style.opacity=".35";textEl.textContent="";let i=0;function tick(){textEl.textContent=p.slice(0,i++);if(i<=p.length)setTimeout(tick,24);else{typing=false;next.disabled=false;next.style.opacity="1";done()}}tick()}
+function showParagraph(){showingFull=false;typeString(paragraphs[current],()=>{next.textContent=current===paragraphs.length-1?"Read it all":"Next";if(current===paragraphs.length-1){sign.classList.remove("hidden");more.classList.add("hidden")}})}
+function showFullLetter(){showingFull=true;textEl.textContent=paragraphs.join("\n\n");next.classList.add("hidden");sign.classList.remove("hidden");more.classList.remove("hidden")}
+next.onclick=()=>{if(typing)return;if(current<paragraphs.length-1){current++;showParagraph()}else if(!showingFull){showFullLetter()}};
 more.onclick=()=>{letter.classList.add("hidden");final.classList.remove("hidden");hearts(28)};
 listen.onclick=async()=>{try{if(voice.paused){await voice.play();listen.textContent="♡ Pause my memo"}else{voice.pause();listen.textContent="♡ Continue my memo"}}catch(e){listen.textContent="♡ Tap again to play my memo";console.error(e)}};
 voice.onended=()=>listen.textContent="♡ Check this dope unscripted memo out";
