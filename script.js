@@ -1,4 +1,4 @@
-const open=document.getElementById("open"),intro=document.getElementById("intro"),letter=document.getElementById("letter"),textEl=document.getElementById("text"),more=document.getElementById("more"),final=document.getElementById("final");
+const open=document.getElementById("open"),intro=document.getElementById("intro"),letter=document.getElementById("letter"),textEl=document.getElementById("text"),more=document.getElementById("more"),final=document.getElementById("final"),listen=document.getElementById("listen"),voice=document.getElementById("voice");
 const text=`I've had some time to think, and I realized how much I care about you.
 
 And honestly, I know I haven't made you as happy or made you smile the way I used to these past few days. I'm sorry for that.
@@ -13,5 +13,7 @@ I love you. ♥`;
 open.onclick=()=>{intro.classList.add("hidden");letter.classList.remove("hidden");type()};
 function type(){let i=0;(function tick(){textEl.textContent=text.slice(0,i++);if(i<=text.length)setTimeout(tick,24);else more.classList.remove("hidden")})()}
 more.onclick=()=>{letter.classList.add("hidden");final.classList.remove("hidden");hearts(28)};
+listen.onclick=()=>{if(voice.paused){voice.play();listen.textContent="♡ Pause my message"}else{voice.pause();listen.textContent="♡ Continue my message"}};
+voice.onended=()=>listen.textContent="♡ Listen to my message again";
 function hearts(n=1){for(let i=0;i<n;i++)setTimeout(()=>{let h=document.createElement("div");h.className="floating";h.textContent=Math.random()>.4?"♥":"♡";h.style.left=Math.random()*100+"vw";h.style.fontSize=10+Math.random()*20+"px";h.style.animationDuration=5+Math.random()*5+"s";document.getElementById("hearts").appendChild(h);setTimeout(()=>h.remove(),10000)},i*100)}
 setInterval(()=>{if(final.classList.contains("hidden"))hearts(1)},1200);
